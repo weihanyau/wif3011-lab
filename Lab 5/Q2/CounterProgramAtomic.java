@@ -1,6 +1,6 @@
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class CounterProgram {
+public class CounterProgramAtomic {
     private static final AtomicInteger counter = new AtomicInteger(0);
     private static final int TARGET_COUNT = 5000;
 
@@ -12,14 +12,14 @@ public class CounterProgram {
         listenerThread.start();
     }
 
-    static class CounterIncrementer extends Thread{
+    static class CounterIncrementer extends Thread {
         @Override
         public void run() {
             while (true) {
                 int nextCount = counter.get() + 1;
-                System.out.println("Counter incremented: " + nextCount); 
+                System.out.println("Counter incremented: " + nextCount);
                 counter.set(nextCount);
-                try{
+                try {
                     Thread.sleep(2);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -28,7 +28,7 @@ public class CounterProgram {
         }
     }
 
-    static class CounterListener extends Thread{
+    static class CounterListener extends Thread {
         private int lastCount = counter.get();
 
         @Override

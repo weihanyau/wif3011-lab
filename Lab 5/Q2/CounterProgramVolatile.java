@@ -10,14 +10,14 @@ public class CounterProgramVolatile {
         listenerThread.start();
     }
 
-    static class CounterIncrementer extends Thread{
+    static class CounterIncrementer extends Thread {
         @Override
         public void run() {
             while (true) {
                 int nextCount = counter + 1;
-                System.out.println("Counter incremented: " + nextCount); 
+                System.out.println("Counter incremented: " + nextCount);
                 counter = nextCount;
-                try{
+                try {
                     Thread.sleep(1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -26,7 +26,7 @@ public class CounterProgramVolatile {
         }
     }
 
-    static class CounterListener extends Thread{
+    static class CounterListener extends Thread {
         private int lastCount = counter;
 
         @Override
