@@ -1,3 +1,5 @@
+package lab5.q1;
+
 import java.util.Random;
 
 public class BankingQueueAtomic {

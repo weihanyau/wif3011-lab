@@ -1,7 +1,7 @@
-import java.util.concurrent.atomic.AtomicInteger;
+package lab5.q2;
 
-public class CounterProgramAtomic {
-    private static final AtomicInteger counter = new AtomicInteger(0);
+public class CounterProgramVolatile {
+    private static volatile int counter = 0;
     private static final int TARGET_COUNT = 5000;
 
     public static void main(String[] args) {
@@ -16,11 +16,11 @@ public class CounterProgramAtomic {
         @Override
         public void run() {
             while (true) {
-                int nextCount = counter.get() + 1;
+                int nextCount = counter + 1;
                 System.out.println("Counter incremented: " + nextCount);
-                counter.set(nextCount);
+                counter = nextCount;
                 try {
-                    Thread.sleep(2);
+                    Thread.sleep(1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -29,17 +29,17 @@ public class CounterProgramAtomic {
     }
 
     static class CounterListener extends Thread {
-        private int lastCount = counter.get();
+        private int lastCount = counter;
 
         @Override
         public void run() {
-            while (counter.get() < TARGET_COUNT) {
-                if (counter.get() != lastCount) {
-                    System.out.println("Counter changed: " + counter.get());
-                    lastCount = counter.get();
+            while (counter < TARGET_COUNT) {
+                if (counter != lastCount) {
+                    System.out.println("Counter changed: " + counter);
+                    lastCount = counter;
                 }
             }
-            System.out.println("Counter changed: " + counter.get());
+            System.out.println("Counter changed: " + counter);
             System.exit(0);
         }
     }

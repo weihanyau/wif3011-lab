@@ -1,3 +1,5 @@
+package lab1.q2;
+
 public class Main {
     private static boolean isCharDone = false;
     private static boolean isNumDone = false;
