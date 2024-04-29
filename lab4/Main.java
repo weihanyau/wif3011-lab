@@ -1,6 +1,9 @@
 package lab4;
 
 import java.util.Random;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Main {
     public static void main(String[] args) {
@@ -15,40 +18,34 @@ public class Main {
 
     static class Node<E> {
         private E value = null;
-        private Object lock = new Object();
-        private boolean valueChanged = false;
-
-        public Node() {
-        }
+        private Lock lock = new ReentrantLock();
+        private Condition valueChanged = lock.newCondition();
 
         public void setValue(E value) {
-            synchronized (lock) {
-                System.out.println("Setting value to " + value);
-                this.value = value;
-                valueChanged = true;
-                lock.notifyAll();
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            lock.lock();
+            System.out.println("Setting value to " + value);
+            this.value = value;
+            valueChanged.signalAll();
+            lock.unlock();
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
 
         public void executeOnValue(E desiredValue, Runnable task) {
-            synchronized (lock) {
-                while (value == null || !valueChanged || !value.equals(desiredValue)) {
-                    if (value != null && valueChanged) {
-                        System.out.println("Checking value " + value + " against " + desiredValue);
-                    }
-                    try {
-                        lock.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                valueChanged = false;
+            lock.lock();
+            try {
+                do {
+                    valueChanged.await();
+                    System.out.println("Checking value " + value + " against " + desiredValue);
+                } while (desiredValue != value);
                 task.run();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                lock.unlock();
             }
         }
 
