@@ -18,9 +18,8 @@ public class CounterProgramAtomic {
         @Override
         public void run() {
             while (true) {
-                int nextCount = counter.get() + 1;
+                int nextCount = counter.incrementAndGet();
                 System.out.println("Counter incremented: " + nextCount);
-                counter.set(nextCount);
                 try {
                     Thread.sleep(2);
                 } catch (InterruptedException e) {
