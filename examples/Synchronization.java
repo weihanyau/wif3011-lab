@@ -1,5 +1,19 @@
 package examples;
 
+public class Synchronization {
+
+    public static void main(String[] args) {
+        S s = new S();
+        Thread t1 = new Thread(s);
+        Thread t2 = new Thread(s);
+        t1.setName("Thread 1");
+        t2.setName("Thread 2");
+        t1.start();
+        t2.start();
+    }
+
+}
+
 class Update {
 
     static int sum = 0;
@@ -20,18 +34,4 @@ class S extends Thread {
             u.updateSum(10);
         }
     }
-}
-
-public class Synchronization {
-
-    public static void main(String[] args) {
-        S s = new S();
-        Thread t1 = new Thread(s);
-        Thread t2 = new Thread(s);
-        t1.setName("Thread 1");
-        t2.setName("Thread 2");
-        t1.start();
-        t2.start();
-    }
-
 }
