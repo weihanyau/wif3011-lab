@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) {
         IntStream.rangeClosed(1, 50).parallel().forEach((num) -> {
             if (isPrime(num)) {
-                System.out.println("Thread " + Thread.currentThread().getId() + ": " + num);
+                System.out.println("Thread " + Thread.currentThread().getName() + ": " + num);
             }
         });
     }
